@@ -1,6 +1,6 @@
 <template>
   <form class="news-form" novalidate @submit.prevent="onSubmit">
-    <label class="news-form__label" for="news-email">Tu correo electrónico (aviso de novedades)</label>
+    <label class="news-form__label" for="news-email">Tu correo electrónico</label>
     <input
       id="news-email"
       v-model="email"
@@ -39,12 +39,12 @@ export default {
         const status = addSubscriber(this.email);
         this.message =
           status === 'exists'
-            ? 'Ese correo ya estaba guardado en este dispositivo.'
-            : 'Tu interés quedó guardado en este dispositivo. Las novedades por correo todavía no están disponibles.';
+            ? 'Ese correo ya está en nuestra lista.'
+            : '¡Listo! Ya estás en la lista de FemCine.';
         this.$emit('subscribed', this.email.trim());
         this.email = '';
       } catch (e) {
-        this.error = e && e.message ? e.message : 'No pudimos guardar tu correo en este dispositivo.';
+        this.error = e && e.message ? e.message : 'No pudimos registrar tu suscripción. Intentá de nuevo.';
       }
     }
   }

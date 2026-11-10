@@ -3,7 +3,7 @@
     <div class="container site-header__inner">
       <div class="site-header__brand-row">
         <router-link to="/" class="site-header__logo">
-          <img :src="logo" alt="FemCine, ir al inicio" width="196" height="53" />
+          <img :src="logo" alt="FemCine, ir al inicio" width="393" height="106" />
         </router-link>
         <div class="site-header__auth-mobile">
           <AuthButton />
@@ -82,24 +82,34 @@ export default {
 .site-header { background: #0a0a0a var(--img-negro) center / cover; padding-block: 16px; border-bottom: 2px solid rgba(255, 0, 204, 0.25); }
 .site-header__inner { display: grid; gap: 14px; }
 .site-header__brand-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.site-header__logo { display: inline-flex; width: fit-content; min-height: 48px; align-items: center; }
-.site-header__logo img { height: 42px; width: auto; display: block; }
-.site-header__auth-mobile { display: flex; align-items: center; }
+.site-header__logo { display: inline-flex; flex: 0 0 auto; width: 140px; min-height: 48px; align-items: center; }
+.site-header__logo img { width: 100%; height: auto; display: block; object-fit: contain; }
+.site-header__auth-mobile { display: flex; min-width: 0; align-items: center; }
 .site-header__desktop-actions { display: none; }
 
 @media (min-width: 768px) {
   .site-header { padding-block: 20px; }
-  .site-header__inner { grid-template-columns: auto minmax(200px, 340px) 1fr; align-items: center; gap: 24px; }
+  .site-header__inner { grid-template-columns: 156px minmax(0, 1fr); align-items: center; gap: 16px 20px; }
+  .site-header__logo { width: 156px; }
   .site-header__auth-mobile { display: none; }
-  .site-header__desktop-actions { display: flex; align-items: center; justify-content: flex-end; gap: clamp(16px, 2.5vw, 36px); }
-  .site-header__nav { display: flex; align-items: center; gap: clamp(16px, 2.5vw, 36px); }
+  .site-header__desktop-actions { display: flex; grid-column: 1 / -1; align-items: center; justify-content: space-between; gap: 20px; }
+  .site-header__nav { display: flex; align-items: center; gap: 16px; }
   .site-header__link {
     display: inline-flex; align-items: center; min-height: 44px; padding: 0 4px;
-    font-family: var(--font-display); font-weight: 800; font-size: 1.05rem;
+    font-family: var(--font-body); font-weight: 700; font-size: 0.95rem;
     letter-spacing: 0.04em; text-transform: uppercase; text-decoration: none; color: var(--white);
     border-bottom: 3px solid transparent;
   }
   .site-header__link:hover { color: var(--pink); }
   .site-header__link.is-active { color: var(--pink); border-bottom-color: var(--pink); }
+}
+
+@media (min-width: 1100px) {
+  .site-header__inner { grid-template-columns: 156px minmax(160px, 1fr) auto; }
+  .site-header__desktop-actions { grid-column: auto; justify-content: flex-end; }
+}
+
+@media (max-width: 380px) {
+  .site-header__logo { width: 120px; }
 }
 </style>

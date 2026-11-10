@@ -3,12 +3,12 @@ export const CREATORS = [
   {
     name: 'Mora Larrigaudiere Curutchet',
     role: 'Diseñadora Multimedial',
-    bio: 'Curaduría editorial, diseño visual y desarrollo de experiencia de usuario.'
+    bio: 'Curaduría editorial, diseño visual, experiencia de usuario y desarrollo web.'
   },
   {
     name: 'Oriana Fuentes',
     role: 'Diseñadora Multimedial',
-    bio: 'Diseño visual, estética pop y arquitectura interactiva.'
+    bio: 'Curaduría editorial, diseño visual, experiencia de usuario y desarrollo web.'
   }
 ];
 

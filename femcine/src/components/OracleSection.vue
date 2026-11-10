@@ -158,14 +158,6 @@
             {{ result.phrase }}
           </p>
 
-          <p v-if="result.oraclePhrase" class="oracle-original-phrase">
-            Veredicto original: “{{ result.oraclePhrase }}”
-          </p>
-
-          <p class="oracle-disclaimer">
-            Respuestas al azar por YesNoOracle Crystal Ball, para entretenimiento cinéfilo.
-          </p>
-
           <div class="oracle-result-actions">
             <button
               type="button"
@@ -646,20 +638,6 @@ export default {
   color: var(--white);
   max-width: 44ch;
   line-height: 1.4;
-}
-
-.oracle-original-phrase {
-  margin: 0;
-  font-size: 0.92rem;
-  color: var(--pink-soft);
-  font-style: italic;
-}
-
-.oracle-disclaimer {
-  margin: 8px 0 0;
-  font-size: 0.85rem;
-  color: var(--muted);
-  font-style: italic;
 }
 
 .oracle-result-actions {

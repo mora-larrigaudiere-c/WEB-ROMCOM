@@ -274,4 +274,8 @@ export default {
   padding: 1px;
   flex-shrink: 0;
 }
+
+@media (min-width: 768px) {
+  .auth-box__login-btn { white-space: nowrap; }
+}
 </style>

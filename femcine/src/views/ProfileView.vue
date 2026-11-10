@@ -670,7 +670,7 @@ export default {
   border-bottom: 3px solid transparent;
   padding: 12px 18px;
   color: var(--muted);
-  font-family: var(--font-display);
+  font-family: var(--font-body);
   font-size: 1.1rem;
   font-weight: 800;
   text-transform: uppercase;
