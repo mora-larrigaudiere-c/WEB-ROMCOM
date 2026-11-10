@@ -1,0 +1,29 @@
+{
+  "project_tests": {
+    "passed": 29,
+    "failed": 0
+  },
+  "independent_frontend_cases": {
+    "passed": 6,
+    "failed": 0,
+    "network": "simulated deferred responses"
+  },
+  "postgresql_rls_cases": {
+    "passed": 12,
+    "failed": 0,
+    "environment": "PGlite with simulated Supabase Auth contract"
+  },
+  "production_build": "passed with live Supabase public configuration",
+  "supabase_live": {
+    "project_ref": "umlryyxwjswdcwykughr",
+    "schema_execution": "passed in dashboard",
+    "seed_movie_count": 16,
+    "rls_enabled_tables": 6,
+    "frontend_connection": "public REST query passed; 16 movies",
+    "google_auth": "pending"
+  },
+  "google_oauth_live": "pending",
+  "github_publication": "pending",
+  "vercel_deployment": "pending",
+  "ai_studio_sync": "last local preference queue fix pending sync; AI Studio daily quota exceeded"
+}

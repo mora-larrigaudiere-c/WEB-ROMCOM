@@ -1,0 +1,6 @@
+{
+  "name": "FemCine",
+  "description": "Catálogo de películas y experiencia cinematográfica con mirada editorial en comedia romántica, cultura pop y personajes icónicos.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

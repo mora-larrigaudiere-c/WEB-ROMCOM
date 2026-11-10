@@ -1,21 +1,18 @@
-# Guion del video de demostración (5 a 10 minutos)
+# Guion para la demostración de FemCine
 
-Grabá en el navegador con la consola cerrada. Mostrá primero escritorio y después la vista móvil (herramientas de desarrollo, 390 px).
+Duración objetivo: ocho minutos. Participan Mora Larrigaudiere Curutchet y Oriana Fuentes Castro. Grabar la aplicación real, con notificaciones y pestañas personales fuera de la captura. El video no está grabado por la existencia de este guion.
 
-| Min | Qué mostrar | Qué decir |
+| Tiempo | Mostrar | Explicar |
 |---|---|---|
-| 0:00 | Inicio completo, scroll de arriba a abajo | Qué es FemCine y qué secciones tiene |
-| 0:45 | Carrusel "Drama semanal" y Hall de íconos | Que el carrusel sale del catálogo guardado |
-| 1:15 | Categorías → clic en una | Que el filtro viaja en la URL |
-| 1:45 | Catálogo: buscar, filtrar, ordenar, combinar; búsqueda sin resultados | Contador y estado sin coincidencias |
-| 3:00 | Detalle de una película; recargar la página (F5) | Que la ruta funciona al recargar |
-| 3:30 | **Alta**: enviar vacío (errores), completar mal (año, duración, URL), completar bien | Validaciones propias y mensajes junto al campo |
-| 5:00 | **Edición** y **cancelación** (no cambia el registro) | Formulario reutilizado, trabaja sobre una copia |
-| 5:45 | **Eliminar** con modal (Escape, Tab, confirmar) | Foco atrapado y devuelto |
-| 6:30 | **Persistencia**: recargar y cerrar/abrir el navegador | LocalStorage; catálogo vacío no se repone |
-| 7:15 | "Más cine para descubrir": carga, resultados; simular error (desconectar red) y **Reintentar** | Fetch real, estados de carga/error |
-| 8:15 | Newsletter con correo inválido y válido | El mensaje aclara que se guarda solo en el dispositivo |
-| 8:45 | Responsive: 390 px (barra inferior), tablet, escritorio; Nosotras y 404 | Diseño móvil primero |
-| 9:30 | Cierre | Tecnologías: Vue 3, Vue CLI, Vue Router |
+| 0:00–0:40 | Inicio en vista móvil | Propuesta de FemCine, identidad visual y navegación de una SPA con Vue CLI. |
+| 0:40–1:20 | Catálogo con 16 películas | Búsqueda por texto, categoría y orden. Mostrar una búsqueda sin resultados y restablecer filtros. |
+| 1:20–2:00 | Detalle y preferencias | Ficha, favorita y nota. Recargar para comprobar persistencia local. |
+| 2:00–3:20 | Alta y edición con cuenta administradora | Enviar formulario vacío, corregir campos, guardar película de demostración y editarla. Mostrar cancelar y luego guardar una edición. |
+| 3:20–4:00 | Eliminación de esa película de demostración | Abrir y cancelar la confirmación; luego eliminar únicamente el registro preparado para el video. |
+| 4:00–4:50 | Oráculo | Escribir pregunta, activar sonido si se desea, consultar y mostrar el veredicto real, la animación y la opción de silenciar. Explicar Fetch y manejo de error. |
+| 4:50–6:00 | Cuenta normal y comunidad | Crear reseña y publicación; mostrar sus estados pendientes en Mi Perfil. Editar un aporte y explicar que vuelve a revisión. |
+| 6:00–6:50 | Panel de creadoras | Aprobar un aporte y comprobar que se vuelve público. Mostrar que una cuenta normal no puede administrar el catálogo. |
+| 6:50–7:30 | Persistencia compartida | Recargar o abrir otra sesión autorizada para comprobar el catálogo compartido. Cerrar sesión y verificar que las preferencias privadas desaparecen. |
+| 7:30–8:00 | Tablet/escritorio y Nosotras | Mostrar adaptación de grillas y navegación; cerrar con créditos y estado real de la entrega. |
 
-Para restablecer el catálogo de ejemplo antes de grabar: DevTools → Application → Local Storage → borrar `femcine:movies:v1` y recargar.
+Antes de grabar, completar Supabase, Google OAuth, roles y despliegue. Preparar cuentas y registros de demostración identificados como tales. Si la conexión real todavía no funciona, decirlo expresamente y no simular que se probó. La documentación técnica y la defensa permanecen fuera de la interfaz pública.

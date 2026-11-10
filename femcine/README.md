@@ -1,100 +1,92 @@
 # FemCine
 
-Catálogo de películas con mirada editorial: cine, cultura pop, personajes femeninos y humor.
-Proyecto académico de **Práctica Profesionalizante: Desarrollo Web y Mobile** (Tecnicatura Superior en Diseño Multimedial, ISEC).
+Catálogo de películas y comunidad de cine con colecciones editoriales, reseñas, publicaciones y un oráculo interactivo en español.
 
 ## Integrantes
 
-Completar en `src/config/team.js` (lista `TEAM_MEMBERS`) y copiar los nombres acá:
+- Mora Larrigaudiere Curutchet.
+- Oriana Fuentes Castro. En la web figura como Oriana Fuentes.
 
-- _Nombre y apellido_
-- _Nombre y apellido_
+Ambas son Diseñadoras Multimediales. La documentación académica pertenece a Práctica Profesionalizante Desarrollo Web y Mobile, Tecnicatura Superior en Diseño Multimedial, ISEC. Esos datos no se muestran en la interfaz pública.
 
-## Tecnologías
+## Tecnologías y ejecución
 
-Vue 3 (Options API, componentes `.vue`) · Vue CLI (`@vue/cli-service` 5) · Vue Router 4 · LocalStorage · Fetch · CSS propio (sin frameworks).
+Vue 3 con Options API, Vue CLI 5, Vue Router 4, CSS propio, LocalStorage, Fetch, Supabase y Web Audio API. Requiere Node.js 22 o superior.
 
-## Instalación y ejecución
-
-Requiere Node.js 18 o superior.
-
-```bash
-npm install
-npm run serve     # desarrollo en http://localhost:8080
-npm run build     # compilación de producción en /dist
-npm test          # pruebas de la lógica (necesita Node 22.7 o superior)
+```sh
+npm ci
+npm run serve
+npm test
+npm run build
 ```
 
-### Despliegue en Vercel
+La salida de producción es `dist/`. `npm run dev` inicia el servidor en el puerto 3000. No se necesita Vite ni React para ejecutar el proyecto.
 
-`vercel.json` reenvía todas las rutas a `index.html`, así que recargar `/peliculas/:id` funciona.
-Framework preset: *Vue CLI* (o "Other") · Build command: `npm run build` · Output directory: `dist`.
+## Funciones
 
-## Funcionalidades
+- Catálogo compartido con 16 películas iniciales, búsqueda por texto, categorías y orden por título o año.
+- Detalle de película y reseñas de la comunidad.
+- Favoritos y calificaciones personales, separados por cuenta.
+- Comunidad con publicaciones propias. Las reseñas y publicaciones nuevas o editadas vuelven a revisión.
+- Perfil con edición de nombre y biografía, actividad propia y edición de aportes.
+- Panel de creadoras para administrar el catálogo y moderar contenido.
+- Oráculo en español: bola de cristal animada y efectos de sonido propios, con respuestas reales mediante Fetch a YesNoOracle.
+- Diseño adaptable, navegación móvil, transiciones Vue y `transition-group`.
+- Registro local de interés por novedades; no existe un servicio de envío de correos conectado.
 
-- **Rutas (Vue Router):** `/`, `/peliculas`, `/peliculas/:id`, `/peliculas/nueva`, `/peliculas/:id/editar`, `/nosotras` y una página 404.
-- **Inicio:** hero, presentación, carrusel "Drama semanal" (alimentado por el catálogo), "Elegí tu veneno" (6 categorías), "Hall de íconos", newsletter.
-- **Catálogo:** 16 películas de ejemplo, búsqueda por título (sin distinguir mayúsculas ni tildes), filtro por categoría editorial, orden por título y año, contador de resultados y estado sin coincidencias. Los filtros viven en la URL (`?q=&categoria=&orden=`).
-- **Detalle:** póster completo, ficha, volver, editar y eliminar con modal de confirmación accesible. Estado claro si el id no existe.
-- **Alta y edición:** un único componente `MovieForm` con validaciones propias y mensajes junto a cada campo. La edición trabaja sobre una copia: cancelar no modifica nada.
-- **Persistencia:** el catálogo se guarda en LocalStorage. Las películas de ejemplo se cargan **solo si no existe un catálogo guardado**; un catálogo vacío es válido y no se repone.
-- **Más cine para descubrir:** sección externa con Fetch a la Studio Ghibli API (`https://ghibliapi.vercel.app/films`, pública, sin clave), con estados de carga, error y reintento. No mezcla ni reemplaza los registros locales.
-- **Newsletter:** valida el correo y lo guarda **solo en este dispositivo** (demostración). No se envía ningún correo.
-- **Accesibilidad y responsive:** móvil primero, navegación inferior en móvil, superior desde 768 px, foco visible, enlace "Saltar al contenido", etiquetas de formulario, textos alternativos, modal con foco atrapado y cierre con Escape, respeto de `prefers-reduced-motion`.
+## Modelo de acceso
 
-## Categorías editoriales vs. género
+| Información | Lectura | Escritura |
+|---|---|---|
+| Películas | Pública | Administradoras |
+| Nombre público, avatar y biografía | Pública | Su titular |
+| Correos | No disponibles mediante la API pública de perfiles | Supabase Auth y proceso de perfil |
+| Favoritos y calificaciones personales | Su titular | Su titular |
+| Reseñas y publicaciones aprobadas | Pública | Autor con nueva revisión; moderación por administradoras |
+| Aportes pendientes o rechazados | Autor y administradoras | Autor y administradoras, según las políticas |
+| Roles administrativos | Cuenta propia y administradoras | Asignación manual desde el servidor |
 
-Las **categorías** (Romcom, Musical, Llanto, Época, Distopía, Terror) son colecciones de FemCine. El **género** (por ejemplo "Comedia romántica") es un dato aparte de cada película.
-El repositorio de recursos no incluye pósters para Musical ni Distopía, por eso esas colecciones arrancan vacías y muestran el estado "sin coincidencias". Se pueden poblar agregando películas (con una URL de póster).
+Las políticas RLS de PostgreSQL controlan los permisos incluso si alguien llama directamente a la API. Ocultar un botón no sustituye esas políticas. El rol no se obtiene modificando el perfil ni los metadatos de Google.
 
-## Estructura
+## Configuración de Supabase
 
+1. Crear un proyecto Supabase. Para esta configuración se preparó el plan gratuito, Data API habilitada, exposición automática de tablas deshabilitada y RLS automático habilitado. No es necesario compartir la contraseña de la base con la aplicación.
+2. Revisar y ejecutar `supabase/schema.sql` en el SQL Editor. Crea `profiles`, `admin_roles`, `movies`, `movie_preferences`, `reviews` y `posts`, las concesiones de acceso, las políticas y las 16 películas. El seed usa `ON CONFLICT DO NOTHING`, por lo que repetirlo conserva los cambios editoriales existentes.
+3. Crear `.env.local` a partir de `.env.example` y completar:
+
+```dotenv
+VUE_APP_SUPABASE_URL=https://TU_PROYECTO.supabase.co
+VUE_APP_SUPABASE_ANON_KEY=TU_CLAVE_PUBLICA
 ```
-src/
-  main.js, App.vue
-  router/index.js            rutas
-  store/catalog.js           estado compartido del catálogo (reactive)
-  services/                  storageService (LocalStorage), movieRepository, newsletterService, ghibliService (Fetch)
-  data/                      assets.js (manifiesto de recursos), categories.js, seedMovies.js, navigation.js
-  utils/                     validators.js, catalogQuery.js, movieForm.js, poster.js
-  config/team.js             integrantes (configurable)
-  components/                17 componentes reutilizables
-  views/                     Home, Catalog, MovieDetail, MovieForm, About, NotFound
-  assets/img/                recursos gráficos (copias con nombres simples)
-  assets/styles/main.css     estilos globales
-tests/logic.test.mjs         pruebas de lógica pura
-```
 
-## Recursos gráficos
+Usar la clave pública/anon del proyecto. Nunca colocar `service_role`, la contraseña de PostgreSQL ni secretos de OAuth en variables `VUE_APP_*`: esas variables se incluyen en el navegador.
 
-Copias locales de los originales del repositorio `WEB-ROMCOM` (los originales no se modificaron). Todas las rutas están centralizadas en `src/data/assets.js`.
+4. Reiniciar el servidor o volver a compilar después de modificar variables.
+5. En Google Cloud, configurar un cliente OAuth web. Su URI de retorno es el callback de Supabase: `https://TU_PROYECTO.supabase.co/auth/v1/callback`. Guardar el Client ID y el Client Secret en el proveedor Google de Supabase, no en el código.
+6. En Supabase Authentication, configurar el Site URL de producción y las Redirect URLs exactas de desarrollo y producción. Por ejemplo, `http://localhost:3000/` para `npm run dev`. El inicio de sesión debe probarse en una pestaña independiente, además de la vista previa integrada.
+7. Cada creadora inicia sesión con Google. Identificar su UUID en Authentication > Users y usar `supabase/bootstrap_admin.sql` para asignar el rol a la cuenta correcta. No asignar roles por un nombre escrito en un formulario.
 
-| Archivo local (`src/assets/img/`) | Original (`GRAFICOS/`) |
-|---|---|
-| `logo.png` | `LOGO.png` |
-| `hero-banner.png` | `FONDOS/BANNER PRINCIPAL.png` |
-| `bg-negro.png`, `bg-rosa.png`, `bg-foto.png` | `FONDOS/fondo negro.png`, `fondo rosa.png`, `FONDO FOTO.png` |
-| `bg-transicion.png` | `FONDOS/fondo transición.png` |
-| `newsletter-recorte.png` | `FONDOS/RECORTE ESQUINA NEWSLETTER.png` |
-| `categorias/{romcom,musical,llanto,epoca,distopia,terror}.png` | `GÉNEROS/{ROMCOM,MUSICAL,LLANTO,ÉPOCA,DISTOPIA,TERROR}.png` |
-| `personajes/elle-woods.png`, `elle-woods-title.png` | `PERSONAJES/Group 32.png`, `ELLE WOODS TITLE.png` |
-| `personajes/{cher-horowitz,regina-george,veronica-sawyer}[-title].png` | `PERSONAJES/<NOMBRE>.png` y `<NOMBRE> TITLE.png` |
-| `posters/diez-cosas.png` | `PORTADAS PELICULAS/10 COSAS QUE ODIO DE TI-2.png` |
-| `posters/diez-things.png` | `10 THINGS I HATE ABOUT YOU.png` (misma película; solo se ofrece como póster alternativo en el formulario) |
-| `posters/<slug>.png` | el resto de `PORTADAS PELICULAS/` (p. ej. `ugly-stepsister.png` = `DEN STYGGE STESOSTEREN.png`) |
+Referencias: [Google OAuth](https://supabase.com/docs/guides/auth/social-sign-in/auth-google), [URLs de retorno](https://supabase.com/docs/guides/auth/redirect-urls) y [RLS](https://supabase.com/docs/guides/database/postgres/row-level-security).
 
-La carpeta `PERSONALIDADES/` y las composiciones de `DISEÑO/` no se usan en la aplicación.
+## Modo local y caché
 
-## Procedencia de datos
+Sin variables de Supabase, la aplicación permite explorar una versión local. LocalStorage conserva datos del dispositivo y apoya la persistencia pedida por la consigna. Los datos públicos y las preferencias de cada cuenta deben permanecer separados; el modo local no otorga permisos administrativos en el servidor.
 
-- **Catálogo local:** datos de ejemplo escritos para el proyecto en `src/data/seedMovies.js` (sinopsis propias; director, año y duración de referencia, conviene revisarlos).
-- **API externa:** [Studio Ghibli API](https://ghibliapi.vercel.app) (`/films`). Se consulta en vivo; no se guarda.
+Las tablas y servicios antiguos `user_movies` y `movie_requests`, si aparecen en una versión previa, no describen el modelo actual. No ejecutar instrucciones antiguas de importación de catálogos personales para configurar esta versión.
 
-## Capturas de pantalla
+## GitHub y Vercel
 
-_Pendiente: agregar capturas de Inicio, Catálogo, Detalle, Formulario y vista móvil (390 px)._
+Publicar el código fuente sin `node_modules`, `dist`, contraseñas ni `.env.local`. En Vercel usar Vue CLI u Other, comando de build `npm run build` y carpeta de salida `dist`. Agregar las dos variables públicas de Supabase al entorno y desplegar de nuevo.
 
-## Documentación para la entrega
+`vercel.json` reescribe las rutas hacia `index.html`. Verificar una recarga directa de `/peliculas/x`, `/comunidad` y `/perfil` en la URL final. Después, actualizar las URLs autorizadas de Supabase y probar Google, CRUD y moderación desde producción.
 
-- `docs/GUION-VIDEO.md`: guion del video de demostración (5 a 10 minutos).
-- `docs/DEFENSA.md`: explicación sencilla de flujo de datos, componentes, LocalStorage y Fetch.
+La existencia de la configuración no demuestra que el repositorio o el despliegue estén publicados. Sus URLs y la conexión real se registran solo después de verificarlos.
+
+## Entrega
+
+- `docs/ENTREGA.md`: comprobaciones y pendientes.
+- `docs/DEFENSA.md`: explicación de arquitectura y flujo de datos.
+- `docs/GUION-VIDEO.md`: demostración de aproximadamente ocho minutos.
+- `verification/`: pruebas independientes, cuando se incluyan en el paquete.
+
+Las capturas para el README y el video final deben mostrar esta versión real. No se incluyen imágenes simuladas ni se declara grabado un video que todavía no existe.

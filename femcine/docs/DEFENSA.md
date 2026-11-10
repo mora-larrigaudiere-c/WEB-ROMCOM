@@ -1,40 +1,39 @@
-# Guía para la defensa oral
+# Guía de defensa de FemCine
 
-## Flujo de datos (en una frase)
-`LocalStorage → movieRepository → store/catalog (reactive) → vistas → componentes (props abajo, eventos arriba) → store → repository → LocalStorage`.
+Integrantes: Mora Larrigaudiere Curutchet y Oriana Fuentes Castro. Práctica Profesionalizante Desarrollo Web y Mobile, ISEC.
 
-1. `App.vue` ejecuta `initCatalog()` en `created()`: el repositorio lee LocalStorage (o siembra los ejemplos si no hay nada guardado) y deja las películas en `state.movies`.
-2. Las vistas leen `state.movies` con propiedades computadas (`filteredMovies`, `dramaMovies`, `categoryCards`).
-3. Los componentes hijos reciben datos por **props** y avisan con **eventos** (`$emit`): por ejemplo `MovieForm` emite `submit` con los datos y la vista decide si hace `addMovie` o `updateMovie`.
-4. Cada función del store (`addMovie`, `updateMovie`, `removeMovie`) cambia `state.movies` y llama a `persist()`, que guarda en LocalStorage. Si falla, `state.error` muestra un aviso en `App.vue`.
+## Arquitectura
 
-## Componentes (17) y por qué son reutilizables
-- Estructura: `AppHeader`, `BottomNav`, `SiteFooter`, `SearchBar`.
-- Catálogo: `MovieCard`, `CatalogToolbar`, `PosterImage`, `CategoryCard`.
-- Formularios: `MovieForm` (alta **y** edición), `FormField`, `NewsletterForm`.
-- Retroalimentación: `ConfirmModal`, `StatusMessage`.
-- Home: `DramaCarousel`, `IconHall`, `DisplayTitle`.
-- Externo: `DiscoverSection`, `ExternalFilmCard`.
+La aplicación usa Vue 3 con Options API y Vue CLI. `main.js` crea la aplicación, `App.vue` compone la estructura y Vue Router elige la vista. Las pantallas principales son Inicio, Catálogo, Detalle, Alta/Edición, Nosotras, Comunidad, Perfil y Administración. HTML5 History necesita la reescritura de Vercel para que una recarga de una ruta interna no produzca un error 404.
 
-## Vue Router
-Seis rutas más la 404. `/peliculas/nueva` se declara antes que `/peliculas/:id`. Los filtros del catálogo van en la query (`?q=&categoria=&orden=`). `vercel.json` y `historyApiFallback` permiten recargar rutas.
+Las vistas coordinan acciones y los componentes presentan partes reutilizables: cabecera, navegación inferior, tarjeta de película, formulario, estrellas, mensajes y modal. Las props transportan datos del padre al hijo; los emits notifican acciones al padre. Los valores computed calculan resultados derivados, como filtros, contadores o permisos visibles, sin mantener copias innecesarias.
 
-## Formularios y validaciones
-`v-model` en cada campo. `utils/validators.js` es una función pura que devuelve `{ campo: mensaje }`: obligatorios, longitudes mínimas, año entero en rango, duración positiva, categoría admitida y URL válida. Se valida al salir de cada campo (`blur`) y al enviar; el primer campo con error recibe el foco.
+`created()` inicializa datos y suscripciones. `mounted()` permite operar sobre elementos ya montados. Las transiciones de pantalla usan `transition`; la grilla reactiva del catálogo usa `transition-group` con claves estables.
 
-## LocalStorage
-Solo `storageService.js` toca `localStorage`. `movieRepository.js` decide qué guardar. Clave: `femcine:movies:v1`. Los ejemplos se cargan únicamente si la clave **no existe**; un `[]` guardado es un catálogo vacío válido. Errores de lectura/escritura devuelven mensajes para el usuario.
+## Datos y permisos
 
-## Fetch
-`ghibliService.fetchGhibliFilms` usa `fetch` con timeout y `AbortController`, valida `response.ok` y que el JSON sea un arreglo, y lanza `ApiError` con mensajes comprensibles. `DiscoverSection` lo llama en `mounted()`, muestra carga/éxito/error, ofrece **Reintentar** y cancela la petición en `beforeUnmount()`. Nunca se mezcla con los datos locales.
+`movies` es el catálogo público compartido. `movie_preferences` guarda favoritos y notas de cada cuenta. `reviews` contiene opiniones sobre películas y `posts` publicaciones generales. Ambos tipos de aportes pasan a revisión al crearse o editarse. `profiles` guarda los datos públicos del perfil y `admin_roles` permite verificar a las administradoras.
 
-## Hooks, computed y animaciones
-- `created()`: `App` inicializa el catálogo; `AppHeader` toma `?q=` de la URL; `CatalogView` normaliza filtros inválidos.
-- `mounted()`: `DiscoverSection` dispara el Fetch.
-- Computed: `filteredMovies`, `resultsText`, `dramaMovies`, `categoryCards`, `previewSrc`, `errorCount`.
-- `<transition>`: cambio de página (`App.vue`), diapositivas del carrusel, modal. `<transition-group>`: grilla del catálogo, con `:key="movie.id"`.
+El flujo de una acción es: formulario o botón → método de la vista → store o servicio → Supabase/LocalStorage → actualización reactiva de la interfaz. En un guardado remoto la navegación debe esperar a la respuesta; si falla, se conserva el formulario y se informa el error.
 
-## Preguntas probables
-- *¿Por qué no Vuex/Pinia?* Un único estado pequeño; un `reactive` compartido alcanza y es más simple de explicar.
-- *¿Por qué categoría ≠ género?* La categoría es una colección editorial del sitio; el género es un dato cinematográfico de cada película.
-- *¿Qué pasa si LocalStorage está bloqueado?* La app sigue funcionando en memoria y avisa que los cambios no se guardarán.
+Los permisos se verifican en PostgreSQL mediante RLS y concesiones de columnas. Un visitante puede leer películas y aportes aprobados. Una persona autenticada administra sus preferencias y sus aportes. Las creadoras administran películas y moderan contenido. El código del navegador nunca contiene la clave de servicio ni decide por sí solo que una cuenta es administradora.
+
+El correo de Google no forma parte de las columnas legibles del perfil público. La identidad que usa `auth.uid()` deriva de la sesión validada, no de un ID que el visitante escriba libremente.
+
+## Persistencia y concurrencia
+
+LocalStorage conserva información entre recargas y cierres normales del navegador. Es almacenamiento del dispositivo, no una base compartida. Supabase agrega persistencia entre dispositivos y separación de cuentas. La caché pública debe excluir preferencias y borradores privados.
+
+Al salir o cambiar de cuenta se limpian los datos privados en memoria. Los contadores de generación permiten descartar respuestas de red que pertenecen a una sesión anterior. Las operaciones de preferencias se serializan por película y deben conservar la identidad de la cuenta que inició cada acción.
+
+## Formularios y API
+
+`v-model` vincula los campos con su estado. Las validaciones comprueban obligatorios, longitudes y formatos; los mensajes aparecen junto al campo. El formulario de películas sirve para alta y edición. Una edición debe partir de una copia, de modo que cancelar no modifique el registro.
+
+El oráculo usa Fetch a `https://yesnooracle.app/api/oracle?tool=crystal-ball`, comprueba el estado HTTP y el formato de respuesta y maneja errores y timeout. La bola, los textos en español y los sonidos son una adaptación de FemCine; la API aporta el veredicto. No se debe mostrar una respuesta inventada como si fuera una consulta exitosa.
+
+## Qué demostrar
+
+Explicar una prop, un emit y dos computed concretos del código. Recorrer un alta válida y una inválida, editar y cancelar, mostrar la persistencia, consultar el oráculo y comparar móvil/escritorio. Con Supabase configurado, demostrar una cuenta normal, una administradora y un aporte pendiente antes y después de su aprobación.
+
+Las pruebas locales con servicios simulados no sustituyen probar Google OAuth y las políticas en el proyecto de producción. Cada integrante debe poder explicar el flujo completo y las partes del código que presente.

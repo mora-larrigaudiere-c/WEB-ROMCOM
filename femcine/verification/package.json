@@ -1,0 +1,1 @@
+{"name":"femcine-db-qa","private":true,"type":"module","dependencies":{"@electric-sql/pglite":"^0.3.14"}}
