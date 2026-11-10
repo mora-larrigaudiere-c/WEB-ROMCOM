@@ -52,6 +52,9 @@
       </div>
     </section>
 
+    <!-- EL ORÁCULO DEL DRAMA -->
+    <OracleSection />
+
     <!-- HALL DE ÍCONOS -->
     <IconHall />
 
@@ -70,6 +73,7 @@
 import DisplayTitle from '@/components/DisplayTitle.vue';
 import DramaCarousel from '@/components/DramaCarousel.vue';
 import CategoryCard from '@/components/CategoryCard.vue';
+import OracleSection from '@/components/OracleSection.vue';
 import IconHall from '@/components/IconHall.vue';
 import NewsletterForm from '@/components/NewsletterForm.vue';
 import { state } from '@/store/catalog';
@@ -78,7 +82,7 @@ import { CATEGORIES } from '@/data/categories';
 
 export default {
   name: 'HomeView',
-  components: { DisplayTitle, DramaCarousel, CategoryCard, IconHall, NewsletterForm },
+  components: { DisplayTitle, DramaCarousel, CategoryCard, OracleSection, IconHall, NewsletterForm },
   data() {
     return {
       state,

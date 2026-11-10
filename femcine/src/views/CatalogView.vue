@@ -4,7 +4,9 @@
       <div class="container">
         <div class="catalog__head">
           <DisplayTitle text="Películas" tone="pink" size="clamp(3rem, 12vw, 6.5rem)" tag="h1" />
-          <router-link class="btn btn--pink" :to="{ name: 'pelicula-nueva' }">Agregar película</router-link>
+          <router-link v-if="authState.isAdmin" class="btn btn--pink" :to="{ name: 'pelicula-nueva' }">
+            + Agregar película
+          </router-link>
         </div>
 
         <StatusMessage v-if="state.notice" type="success" dismissible class="catalog__notice" @dismiss="clearNotice">
@@ -16,8 +18,11 @@
           :sort="filters.sort"
           :categories="categories"
           :sort-options="sortOptions"
+          :only-favorites="filters.onlyFavorites"
+          :favorites-count="favoritesCount"
           @update:category="setCategory"
           @update:sort="setSort"
+          @update:favorites="setFavorites"
         />
 
         <p class="catalog__count" role="status" aria-live="polite">{{ resultsText }}</p>
@@ -37,8 +42,6 @@
         </div>
       </div>
     </section>
-
-    <DiscoverSection />
   </div>
 </template>
 
@@ -47,16 +50,16 @@ import DisplayTitle from '@/components/DisplayTitle.vue';
 import StatusMessage from '@/components/StatusMessage.vue';
 import CatalogToolbar from '@/components/CatalogToolbar.vue';
 import MovieCard from '@/components/MovieCard.vue';
-import DiscoverSection from '@/components/DiscoverSection.vue';
 import { state, setNotice } from '@/store/catalog';
+import { authState } from '@/store/auth';
 import { CATEGORIES } from '@/data/categories';
 import { filterAndSort, parseFilters, SORT_OPTIONS, DEFAULT_SORT } from '@/utils/catalogQuery';
 
 export default {
   name: 'CatalogView',
-  components: { DisplayTitle, StatusMessage, CatalogToolbar, MovieCard, DiscoverSection },
+  components: { DisplayTitle, StatusMessage, CatalogToolbar, MovieCard },
   data() {
-    return { state, categories: CATEGORIES, sortOptions: SORT_OPTIONS };
+    return { state, authState, categories: CATEGORIES, sortOptions: SORT_OPTIONS };
   },
   computed: {
     // Los filtros viven en la URL (?q=&categoria=&orden=): se pueden compartir y sobreviven a recargar.
@@ -67,7 +70,10 @@ export default {
       return filterAndSort(this.state.movies, this.filters);
     },
     hasActiveFilters() {
-      return !!(this.filters.query.trim() || this.filters.category);
+      return !!(this.filters.query.trim() || this.filters.category || this.filters.onlyFavorites);
+    },
+    favoritesCount() {
+      return this.state.movies.filter((m) => m.isFavorite === true).length;
     },
     resultsText() {
       const shown = this.filteredMovies.length;
@@ -81,7 +87,7 @@ export default {
     },
     emptyText() {
       return this.state.movies.length
-        ? 'No encontramos películas con esa búsqueda y esa categoría. Probá con otro título o limpiá los filtros.'
+        ? 'No encontramos películas con esa búsqueda y esos filtros. Probá con otro título o limpiá los filtros.'
         : 'Todavía no hay películas guardadas. Podés agregar la primera.';
     }
   },
@@ -105,7 +111,10 @@ export default {
       this.$router.replace({ query: next });
     },
     setCategory(id) {
-      this.updateQuery({ categoria: id });
+      this.updateQuery({ categoria: id, favoritas: '' });
+    },
+    setFavorites(val) {
+      this.updateQuery({ favoritas: val ? 'true' : '' });
     },
     setSort(value) {
       this.updateQuery({ orden: value === DEFAULT_SORT ? '' : value });

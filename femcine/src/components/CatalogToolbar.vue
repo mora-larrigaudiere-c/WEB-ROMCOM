@@ -3,7 +3,7 @@
     <div class="toolbar__group" role="group" aria-labelledby="tb-categorias">
       <p id="tb-categorias" class="toolbar__label">Categoría editorial</p>
       <div class="toolbar__chips">
-        <button type="button" class="chip" :aria-pressed="category === '' ? 'true' : 'false'" @click="$emit('update:category', '')">
+        <button type="button" class="chip" :aria-pressed="category === '' && !onlyFavorites ? 'true' : 'false'" @click="onClearCategory">
           Todas
         </button>
         <button
@@ -11,10 +11,18 @@
           :key="item.id"
           type="button"
           class="chip"
-          :aria-pressed="category === item.id ? 'true' : 'false'"
-          @click="$emit('update:category', item.id)"
+          :aria-pressed="category === item.id && !onlyFavorites ? 'true' : 'false'"
+          @click="onSelectCategory(item.id)"
         >
           {{ item.label }}
+        </button>
+        <button
+          type="button"
+          class="chip chip--fav"
+          :aria-pressed="onlyFavorites ? 'true' : 'false'"
+          @click="$emit('update:favorites', !onlyFavorites)"
+        >
+          ♥ Favoritas <span v-if="favoritesCount">({{ favoritesCount }})</span>
         </button>
       </div>
     </div>
@@ -34,9 +42,25 @@ export default {
     category: { type: String, default: '' },
     sort: { type: String, required: true },
     categories: { type: Array, required: true },
-    sortOptions: { type: Array, required: true }
+    sortOptions: { type: Array, required: true },
+    onlyFavorites: { type: Boolean, default: false },
+    favoritesCount: { type: Number, default: 0 }
   },
-  emits: ['update:category', 'update:sort']
+  emits: ['update:category', 'update:sort', 'update:favorites'],
+  methods: {
+    onClearCategory() {
+      if (this.onlyFavorites) {
+        this.$emit('update:favorites', false);
+      }
+      this.$emit('update:category', '');
+    },
+    onSelectCategory(id) {
+      if (this.onlyFavorites) {
+        this.$emit('update:favorites', false);
+      }
+      this.$emit('update:category', id);
+    }
+  }
 };
 </script>
 

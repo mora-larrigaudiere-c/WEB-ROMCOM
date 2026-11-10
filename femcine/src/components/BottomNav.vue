@@ -8,11 +8,14 @@
       :class="{ 'is-active': isActive(item) }"
       :aria-current="isActive(item) ? 'page' : null"
     >
-      <svg class="bottom-nav__icon" viewBox="0 0 24 24" width="26" height="26" aria-hidden="true" focusable="false">
+      <svg class="bottom-nav__icon" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
         <path v-if="item.icon === 'home'" d="M3 11.5 12 4l9 7.500V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z" fill="currentColor" />
         <g v-else-if="item.icon === 'film'" fill="none" stroke="currentColor" stroke-width="2">
           <rect x="3.500" y="3.500" width="17" height="17" rx="2" />
           <path d="M7.500 3.500v17M16.500 3.500v17M3.500 8h4M3.500 12h4M3.500 16h4M16.500 8h4M16.500 12h4M16.500 16h4" />
+        </g>
+        <g v-else-if="item.icon === 'sparkles'" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2l2.4 5.6L20 10l-4.4 4 1.4 6-5-3.2-5 3.2 1.4-6L4 10l5.6-2.4z" />
         </g>
         <g v-else fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
           <circle cx="9" cy="8.500" r="3.200" />
@@ -44,14 +47,14 @@ export default {
 <style scoped>
 .bottom-nav {
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
-  display: grid; grid-template-columns: repeat(3, 1fr);
+  display: grid; grid-template-columns: repeat(4, 1fr);
   padding-bottom: env(safe-area-inset-bottom, 0px);
   background: #fff; color: var(--black); border-top: 3px solid var(--black);
 }
 .bottom-nav__item {
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
-  min-height: 64px; padding: 6px 4px; text-decoration: none; color: var(--black);
-  font-size: 0.8125rem; font-weight: 700;
+  min-height: 64px; padding: 6px 2px; text-decoration: none; color: var(--black);
+  font-size: 0.75rem; font-weight: 700;
 }
 .bottom-nav__item.is-active { background: var(--pink); }
 .bottom-nav__item.is-active span { text-decoration: underline; text-underline-offset: 3px; }

@@ -37,6 +37,11 @@ export default {
       else this.deactivate();
     }
   },
+  mounted() {
+    if (this.open) {
+      this.activate();
+    }
+  },
   beforeUnmount() {
     this.deactivate(false);
   },

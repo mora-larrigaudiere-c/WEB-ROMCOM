@@ -29,6 +29,24 @@ const routes = [
     meta: { title: 'Editar película' }
   },
   {
+    path: '/comunidad',
+    name: 'comunidad',
+    component: () => import(/* webpackChunkName: "comunidad" */ '@/views/CommunityView.vue'),
+    meta: { title: 'Club del Drama' }
+  },
+  {
+    path: '/perfil',
+    name: 'perfil',
+    component: () => import(/* webpackChunkName: "perfil" */ '@/views/ProfileView.vue'),
+    meta: { title: 'Mi Perfil' }
+  },
+  {
+    path: '/admin',
+    name: 'admin',
+    component: () => import(/* webpackChunkName: "admin" */ '@/views/AdminView.vue'),
+    meta: { title: 'Panel de Creadoras' }
+  },
+  {
     path: '/nosotras',
     name: 'nosotras',
     component: () => import(/* webpackChunkName: "nosotras" */ '@/views/AboutView.vue'),
@@ -46,7 +64,6 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
   scrollBehavior(to, from) {
-    // Cambiar filtros (misma ruta) no debe devolver la página arriba.
     if (to.path === from.path) return false;
     return { top: 0 };
   }

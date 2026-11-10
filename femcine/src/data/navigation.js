@@ -1,7 +1,8 @@
-// Ítems de navegación compartidos por la barra superior (escritorio) y la inferior (móvil).
+// Ítems de navegación compartidos por la cabecera (escritorio) y barra inferior (móvil).
 export const NAV_ITEMS = [
   { to: '/', label: 'Inicio', icon: 'home', exact: true },
   { to: '/peliculas', label: 'Películas', icon: 'film', exact: false },
+  { to: '/comunidad', label: 'Comunidad', icon: 'sparkles', exact: false },
   { to: '/nosotras', label: 'Nosotras', icon: 'people', exact: true }
 ];
 

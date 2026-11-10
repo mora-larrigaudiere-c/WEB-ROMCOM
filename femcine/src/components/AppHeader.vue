@@ -1,34 +1,47 @@
 <template>
   <header class="site-header">
     <div class="container site-header__inner">
-      <router-link to="/" class="site-header__logo">
-        <img :src="logo" alt="FemCine, ir al inicio" width="196" height="53" />
-      </router-link>
-      <SearchBar v-model="term" class="site-header__search" @submit="goToCatalog" />
-      <nav class="site-header__nav" aria-label="Principal">
-        <router-link
-          v-for="item in items"
-          :key="item.to"
-          :to="item.to"
-          class="site-header__link"
-          :class="{ 'is-active': isActive(item) }"
-          :aria-current="isActive(item) ? 'page' : null"
-        >
-          {{ item.label }}
+      <div class="site-header__brand-row">
+        <router-link to="/" class="site-header__logo">
+          <img :src="logo" alt="FemCine, ir al inicio" width="196" height="53" />
         </router-link>
-      </nav>
+        <div class="site-header__auth-mobile">
+          <AuthButton />
+        </div>
+      </div>
+
+      <SearchBar v-model="term" class="site-header__search" @submit="goToCatalog" />
+
+      <div class="site-header__desktop-actions">
+        <nav class="site-header__nav" aria-label="Principal">
+          <router-link
+            v-for="item in items"
+            :key="item.to"
+            :to="item.to"
+            class="site-header__link"
+            :class="{ 'is-active': isActive(item) }"
+            :aria-current="isActive(item) ? 'page' : null"
+          >
+            {{ item.label }}
+          </router-link>
+        </nav>
+        <div class="site-header__auth-desktop">
+          <AuthButton />
+        </div>
+      </div>
     </div>
   </header>
 </template>
 
 <script>
 import SearchBar from '@/components/SearchBar.vue';
+import AuthButton from '@/components/AuthButton.vue';
 import { ASSETS } from '@/data/assets';
 import { NAV_ITEMS, isNavActive } from '@/data/navigation';
 
 export default {
   name: 'AppHeader',
-  components: { SearchBar },
+  components: { SearchBar, AuthButton },
   data() {
     return { term: '', logo: ASSETS.logo, items: NAV_ITEMS };
   },
@@ -66,19 +79,23 @@ export default {
 </script>
 
 <style scoped>
-.site-header { background: #0a0a0a var(--img-negro) center / cover; padding-block: 16px; }
+.site-header { background: #0a0a0a var(--img-negro) center / cover; padding-block: 16px; border-bottom: 2px solid rgba(255, 0, 204, 0.25); }
 .site-header__inner { display: grid; gap: 14px; }
+.site-header__brand-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .site-header__logo { display: inline-flex; width: fit-content; min-height: 48px; align-items: center; }
-.site-header__logo img { height: 46px; width: auto; display: block; }
-.site-header__nav { display: none; }
+.site-header__logo img { height: 42px; width: auto; display: block; }
+.site-header__auth-mobile { display: flex; align-items: center; }
+.site-header__desktop-actions { display: none; }
 
 @media (min-width: 768px) {
   .site-header { padding-block: 20px; }
-  .site-header__inner { grid-template-columns: auto minmax(240px, 420px) 1fr; align-items: center; gap: 28px; }
-  .site-header__nav { display: flex; justify-content: flex-end; gap: clamp(20px, 4vw, 56px); }
+  .site-header__inner { grid-template-columns: auto minmax(200px, 340px) 1fr; align-items: center; gap: 24px; }
+  .site-header__auth-mobile { display: none; }
+  .site-header__desktop-actions { display: flex; align-items: center; justify-content: flex-end; gap: clamp(16px, 2.5vw, 36px); }
+  .site-header__nav { display: flex; align-items: center; gap: clamp(16px, 2.5vw, 36px); }
   .site-header__link {
     display: inline-flex; align-items: center; min-height: 44px; padding: 0 4px;
-    font-family: var(--font-display); font-weight: 800; font-size: 1.15rem;
+    font-family: var(--font-display); font-weight: 800; font-size: 1.05rem;
     letter-spacing: 0.04em; text-transform: uppercase; text-decoration: none; color: var(--white);
     border-bottom: 3px solid transparent;
   }

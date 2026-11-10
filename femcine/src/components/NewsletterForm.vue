@@ -1,6 +1,6 @@
 <template>
   <form class="news-form" novalidate @submit.prevent="onSubmit">
-    <label class="news-form__label" for="news-email">Tu correo electrónico</label>
+    <label class="news-form__label" for="news-email">Tu correo electrónico (aviso de novedades)</label>
     <input
       id="news-email"
       v-model="email"
@@ -13,7 +13,7 @@
       :aria-describedby="error ? 'news-error' : null"
     />
     <p v-if="error" id="news-error" class="news-form__error">{{ error }}</p>
-    <button type="submit" class="btn btn--black">Suscribite</button>
+    <button type="submit" class="btn btn--black">Anotarme</button>
     <p v-if="message" class="news-form__ok" role="status">{{ message }}</p>
   </form>
 </template>
@@ -40,7 +40,7 @@ export default {
         this.message =
           status === 'exists'
             ? 'Ese correo ya estaba guardado en este dispositivo.'
-            : 'Listo: guardamos tu correo en este dispositivo para la demostración académica. No se envía ningún correo.';
+            : 'Tu interés quedó guardado en este dispositivo. Las novedades por correo todavía no están disponibles.';
         this.$emit('subscribed', this.email.trim());
         this.email = '';
       } catch (e) {

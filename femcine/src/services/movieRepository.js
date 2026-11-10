@@ -5,8 +5,19 @@ import { SEED_MOVIES } from '../data/seedMovies.js';
 export const MOVIES_KEY = 'femcine:movies:v1';
 const STORAGE_VERSION = 1;
 
+export function normalizeMovie(item) {
+  return {
+    ...item,
+    isFavorite: typeof item.isFavorite === 'boolean' ? item.isFavorite : false,
+    userRating:
+      Number.isInteger(item.userRating) && item.userRating >= 0 && item.userRating <= 5
+        ? item.userRating
+        : 0
+  };
+}
+
 function cloneSeed() {
-  return SEED_MOVIES.map((movie) => ({ ...movie }));
+  return SEED_MOVIES.map((movie) => normalizeMovie({ ...movie }));
 }
 
 function looksLikeMovie(item) {
@@ -37,7 +48,7 @@ export function loadMovies() {
     if (!list) {
       throw new StorageError('El catálogo guardado tiene un formato que no reconocemos.', 'corrupt');
     }
-    return { movies: list.filter(looksLikeMovie), error: null };
+    return { movies: list.filter(looksLikeMovie).map(normalizeMovie), error: null };
   } catch (e) {
     const detail = e instanceof StorageError ? e.message : 'No pudimos cargar el catálogo guardado.';
     return {

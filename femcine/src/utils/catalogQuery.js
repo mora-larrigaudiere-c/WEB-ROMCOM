@@ -23,12 +23,16 @@ function compareTitles(a, b) {
   return a.title.localeCompare(b.title, 'es', { sensitivity: 'base' });
 }
 
-export function filterAndSort(movies, { query = '', category = '', sort = DEFAULT_SORT } = {}) {
+export function filterAndSort(
+  movies,
+  { query = '', category = '', sort = DEFAULT_SORT, onlyFavorites = false } = {}
+) {
   const q = normalizeText(query);
   const result = movies.filter((movie) => {
     const matchesText = !q || normalizeText(movie.title).includes(q);
     const matchesCategory = !category || movie.category === category;
-    return matchesText && matchesCategory;
+    const matchesFavorites = !onlyFavorites || movie.isFavorite === true;
+    return matchesText && matchesCategory && matchesFavorites;
   });
 
   const sorters = {
@@ -40,15 +44,17 @@ export function filterAndSort(movies, { query = '', category = '', sort = DEFAUL
   return result.sort(sorters[sort] || sorters[DEFAULT_SORT]);
 }
 
-// Lee y sanea los filtros que vienen de la URL (?q=...&categoria=...&orden=...).
+// Lee y sanea los filtros que vienen de la URL (?q=...&categoria=...&orden=...&favoritas=...).
 export function parseFilters(query = {}) {
   const first = (v) => (Array.isArray(v) ? v[0] : v);
   const q = first(query.q);
   const categoria = first(query.categoria);
   const orden = first(query.orden);
+  const fav = first(query.favoritas);
   return {
     query: typeof q === 'string' ? q : '',
     category: CATEGORY_IDS.includes(categoria) ? categoria : '',
-    sort: SORT_VALUES.includes(orden) ? orden : DEFAULT_SORT
+    sort: SORT_VALUES.includes(orden) ? orden : DEFAULT_SORT,
+    onlyFavorites: fav === '1' || fav === 'true'
   };
 }

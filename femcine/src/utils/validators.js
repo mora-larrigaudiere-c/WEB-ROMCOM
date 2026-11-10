@@ -27,7 +27,7 @@ export function validateMovie(form, { posterKeys = [], currentYear = new Date().
 
   const title = text(form.title);
   if (!title) errors.title = 'Escribí el título de la película.';
-  else if (title.length < 2) errors.title = 'El título debe tener al menos 2 caracteres.';
+  else if (title.length < 1) errors.title = 'El título no puede estar vacío.';
   else if (title.length > 100) errors.title = 'El título no puede superar los 100 caracteres.';
 
   const year = text(form.year);

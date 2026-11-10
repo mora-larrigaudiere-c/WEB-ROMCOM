@@ -3,9 +3,14 @@
     <a class="skip-link" href="#contenido" @click.prevent="focusMain">Saltar al contenido</a>
     <AppHeader />
 
-    <div v-if="state.error" class="container app__alert">
-      <StatusMessage type="error" title="Problema con el almacenamiento local" dismissible @dismiss="clearError">
-        {{ state.error }}
+    <div v-if="state.error || authState.error" class="container app__alert">
+      <StatusMessage
+        type="error"
+        :title="state.error ? 'Problema con el catálogo' : 'Autenticación'"
+        dismissible
+        @dismiss="clearErrors"
+      >
+        {{ state.error || authState.error }}
       </StatusMessage>
     </div>
 
@@ -27,20 +32,37 @@ import AppHeader from '@/components/AppHeader.vue';
 import BottomNav from '@/components/BottomNav.vue';
 import SiteFooter from '@/components/SiteFooter.vue';
 import StatusMessage from '@/components/StatusMessage.vue';
-import { state, initCatalog, dismissError } from '@/store/catalog';
+import { state, initCatalog, dismissError, setUserSession } from '@/store/catalog';
+import { authState, initAuth, subscribeAuthChange, dismissAuthError } from '@/store/auth';
 
 export default {
   name: 'App',
   components: { AppHeader, BottomNav, SiteFooter, StatusMessage },
   data() {
-    return { state };
+    return {
+      state,
+      authState,
+      unsubscribeAuth: null
+    };
   },
   created() {
-    // Se carga el catálogo antes de dibujar las vistas, para que todas encuentren los datos listos.
-    initCatalog();
+    // 1. Carga inicial del catálogo público compartido
+    initCatalog(null);
+
+    // 2. Suscripción a cambios de sesión (ANTES de initAuth para no perder el primer evento)
+    this.unsubscribeAuth = subscribeAuthChange(({ user }) => {
+      setUserSession(user ? user.id : null);
+    });
+
+    // 3. Inicialización de sesión con Google
+    initAuth();
+  },
+  beforeUnmount() {
+    if (this.unsubscribeAuth) {
+      this.unsubscribeAuth();
+    }
   },
   watch: {
-    // Al cambiar de pantalla (no al cambiar filtros), el foco pasa al contenido para teclado y lectores de pantalla.
     '$route.path'() {
       this.$nextTick(() => this.focusMain());
     }
@@ -49,8 +71,9 @@ export default {
     focusMain() {
       if (this.$refs.main) this.$refs.main.focus({ preventScroll: true });
     },
-    clearError() {
+    clearErrors() {
       dismissError();
+      dismissAuthError();
     }
   }
 };
