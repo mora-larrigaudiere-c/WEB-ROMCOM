@@ -1,92 +1,139 @@
 # FemCine
 
-Catálogo de películas y comunidad de cine con colecciones editoriales, reseñas, publicaciones y un oráculo interactivo en español.
+Catálogo de películas y comunidad cinéfila con colecciones editoriales, reseñas, publicaciones y un oráculo interactivo en español.
+
+## Enlaces del proyecto
+
+| Recurso | Enlace |
+| --- | --- |
+| Aplicación publicada | [femcine.vercel.app](https://femcine.vercel.app/) |
+| Repositorio | [mora-larrigaudiere-c/WEB-ROMCOM](https://github.com/mora-larrigaudiere-c/WEB-ROMCOM) |
+| Código de la aplicación | [Carpeta de FemCine](./) |
+| Supabase · Project URL | https://umlryyxwjswdcwykughr.supabase.co |
+
+La Project URL de Supabase es la dirección base de la API; no es una página de presentación. El catálogo, Google y la base de datos ya están conectados en la aplicación publicada.
 
 ## Integrantes
 
-- Mora Larrigaudiere Curutchet.
-- Oriana Fuentes Castro. En la web figura como Oriana Fuentes.
+- **Mora Larrigaudiere Curutchet** — Diseñadora Multimedial.
+- **Oriana Fuentes Castro** — Diseñadora Multimedial. En la interfaz figura como Oriana Fuentes.
 
-Ambas son Diseñadoras Multimediales. La documentación académica pertenece a Práctica Profesionalizante Desarrollo Web y Mobile, Tecnicatura Superior en Diseño Multimedial, ISEC. Esos datos no se muestran en la interfaz pública.
+Ambas comparten curaduría editorial, diseño visual, experiencia de usuario y desarrollo web. Las dos cuentas de las creadoras tienen el mismo rol de administración.
 
-## Tecnologías y ejecución
+## Funcionalidades implementadas
 
-Vue 3 con Options API, Vue CLI 5, Vue Router 4, CSS propio, LocalStorage, Fetch, Supabase y Web Audio API. Requiere Node.js 22 o superior.
+- Catálogo público compartido con **16 películas**, buscador, filtros por categoría y ordenamiento por título o año.
+- Fichas con póster, sinopsis, dirección, duración y reseñas de la comunidad.
+- Inicio y cierre de sesión con **Google**, perfil y actividad de cada usuaria.
+- Favoritos y calificaciones personales, separados por cuenta.
+- Reseñas de películas y publicaciones propias en el **Club del Drama**.
+- Moderación: los aportes nuevos o editados quedan pendientes hasta que una administradora los aprueba.
+- Panel de creadoras para agregar, editar y eliminar películas y moderar aportes.
+- Formularios con `v-model`, validaciones personalizadas y mensajes de error visibles.
+- Oráculo con bola animada, sonido y respuestas en español obtenidas mediante **Fetch a YesNoOracle**.
+- Diseño para móvil, tablet y escritorio, navegación móvil, transiciones Vue y `transition-group`.
+- Formulario de suscripción de demostración: valida y registra el correo en LocalStorage; no realiza envíos de email.
+
+## Capturas de la aplicación publicada
+
+Capturas reales tomadas el **11 de noviembre de 2026**. La sesión visible corresponde a una creadora; los controles administrativos se muestran según el rol.
+
+### Inicio · escritorio
+
+![Inicio de FemCine en escritorio](docs/capturas/inicio-escritorio.png)
+
+### Catálogo · escritorio
+
+![Catálogo con 16 películas, filtros, ordenamiento y favoritos](docs/capturas/catalogo-escritorio.png)
+
+### Club del Drama · escritorio
+
+![Comunidad con la publicación aprobada Romcoms para una noche con amigas](docs/capturas/comunidad-escritorio.png)
+
+### Inicio · móvil
+
+<img src="docs/capturas/inicio-movil.png" alt="Inicio de FemCine en un teléfono de 393 píxeles, con navegación inferior" width="320">
+
+## Tecnologías
+
+**Vue 3 (Options API), Vue CLI 5, Vue Router 4, JavaScript, CSS, LocalStorage, Fetch, Supabase Auth/PostgreSQL y Web Audio API.**
+
+La aplicación incluye componentes reutilizables, comunicación mediante `props` y `emits`, propiedades `computed` y hooks `created()` y `mounted()`.
+
+## Instalación y ejecución local
+
+Requisitos: **Node.js 22 o superior**, npm y Git.
 
 ```sh
+git clone https://github.com/mora-larrigaudiere-c/WEB-ROMCOM.git
+cd WEB-ROMCOM/femcine
 npm ci
-npm run serve
-npm test
-npm run build
+npm run dev
 ```
 
-La salida de producción es `dist/`. `npm run dev` inicia el servidor en el puerto 3000. No se necesita Vite ni React para ejecutar el proyecto.
+Abrir http://localhost:3000/. Sin variables de Supabase se puede explorar el modo local; Google y la persistencia compartida requieren la configuración de la sección siguiente.
 
-## Funciones
+```sh
+npm test        # Pruebas automáticas del proyecto
+npm run build  # Compilación de producción en dist/
+```
 
-- Catálogo compartido con 16 películas iniciales, búsqueda por texto, categorías y orden por título o año.
-- Detalle de película y reseñas de la comunidad.
-- Favoritos y calificaciones personales, separados por cuenta.
-- Comunidad con publicaciones propias. Las reseñas y publicaciones nuevas o editadas vuelven a revisión.
-- Perfil con edición de nombre y biografía, actividad propia y edición de aportes.
-- Panel de creadoras para administrar el catálogo y moderar contenido.
-- Oráculo en español: bola de cristal animada y efectos de sonido propios, con respuestas reales mediante Fetch a YesNoOracle.
-- Diseño adaptable, navegación móvil, transiciones Vue y `transition-group`.
-- Registro local de interés por novedades; no existe un servicio de envío de correos conectado.
+## Datos y permisos
 
-## Modelo de acceso
+| Cuenta | Permisos |
+| --- | --- |
+| Visitante | Consultar catálogo, fichas y aportes aprobados; usar el oráculo. |
+| Usuaria con Google | Administrar su perfil, favoritos y calificaciones; enviar y editar sus propios aportes. |
+| Administradora | Gestionar el catálogo y aprobar o rechazar contenido comunitario. |
 
-| Información | Lectura | Escritura |
-|---|---|---|
-| Películas | Pública | Administradoras |
-| Nombre público, avatar y biografía | Pública | Su titular |
-| Correos | No disponibles mediante la API pública de perfiles | Supabase Auth y proceso de perfil |
-| Favoritos y calificaciones personales | Su titular | Su titular |
-| Reseñas y publicaciones aprobadas | Pública | Autor con nueva revisión; moderación por administradoras |
-| Aportes pendientes o rechazados | Autor y administradoras | Autor y administradoras, según las políticas |
-| Roles administrativos | Cuenta propia y administradoras | Asignación manual desde el servidor |
+Supabase utiliza las tablas `movies`, `profiles`, `admin_roles`, `movie_preferences`, `reviews` y `posts`. Las políticas **RLS** controlan los permisos en la base de datos. La API pública de perfiles no expone correos y cada usuaria accede a sus propias preferencias.
 
-Las políticas RLS de PostgreSQL controlan los permisos incluso si alguien llama directamente a la API. Ocultar un botón no sustituye esas políticas. El rol no se obtiene modificando el perfil ni los metadatos de Google.
+**LocalStorage** conserva la caché pública y datos del dispositivo. **Supabase** mantiene el catálogo compartido, los perfiles, los aportes y las preferencias de las cuentas. Al restaurar la sesión de Google, la consulta pública del catálogo se completa sin descartar sus resultados.
 
-## Configuración de Supabase
+## Configuración de otro proyecto Supabase
 
-1. Crear un proyecto Supabase. Para esta configuración se preparó el plan gratuito, Data API habilitada, exposición automática de tablas deshabilitada y RLS automático habilitado. No es necesario compartir la contraseña de la base con la aplicación.
-2. Revisar y ejecutar `supabase/schema.sql` en el SQL Editor. Crea `profiles`, `admin_roles`, `movies`, `movie_preferences`, `reviews` y `posts`, las concesiones de acceso, las políticas y las 16 películas. El seed usa `ON CONFLICT DO NOTHING`, por lo que repetirlo conserva los cambios editoriales existentes.
-3. Crear `.env.local` a partir de `.env.example` y completar:
+El proyecto publicado ya está configurado. Para conectar una copia a otro proyecto:
+
+1. Ejecutar [supabase/schema.sql](supabase/schema.sql) en el SQL Editor del nuevo proyecto. Crea las seis tablas, permisos, políticas y 16 películas iniciales. El seed puede repetirse sin reemplazar las ediciones existentes.
+2. Crear `femcine/.env.local` con los valores públicos de ese proyecto:
 
 ```dotenv
 VUE_APP_SUPABASE_URL=https://TU_PROYECTO.supabase.co
-VUE_APP_SUPABASE_ANON_KEY=TU_CLAVE_PUBLICA
+VUE_APP_SUPABASE_ANON_KEY=TU_CLAVE_PUBLICABLE
 ```
 
-Usar la clave pública/anon del proyecto. Nunca colocar `service_role`, la contraseña de PostgreSQL ni secretos de OAuth en variables `VUE_APP_*`: esas variables se incluyen en el navegador.
+3. Habilitar Google en **Authentication → Sign In / Providers**. El Client ID y el Client Secret se guardan únicamente allí. Nunca incluir el secret de Google ni una clave `service_role` en el código o en variables `VUE_APP_*`.
+4. Registrar en Google el callback `https://TU_PROYECTO.supabase.co/auth/v1/callback`. Configurar en Supabase el Site URL de producción y las Redirect URLs de los entornos que se utilicen.
+5. Cada creadora inicia sesión una vez. Luego asignar su rol por el UUID real con [supabase/bootstrap_admin.sql](supabase/bootstrap_admin.sql).
+6. Reiniciar el servidor local o volver a compilar después de cambiar las variables.
 
-4. Reiniciar el servidor o volver a compilar después de modificar variables.
-5. En Google Cloud, configurar un cliente OAuth web. Su URI de retorno es el callback de Supabase: `https://TU_PROYECTO.supabase.co/auth/v1/callback`. Guardar el Client ID y el Client Secret en el proveedor Google de Supabase, no en el código.
-6. En Supabase Authentication, configurar el Site URL de producción y las Redirect URLs exactas de desarrollo y producción. Por ejemplo, `http://localhost:3000/` para `npm run dev`. El inicio de sesión debe probarse en una pestaña independiente, además de la vista previa integrada.
-7. Cada creadora inicia sesión con Google. Identificar su UUID en Authentication > Users y usar `supabase/bootstrap_admin.sql` para asignar el rol a la cuenta correcta. No asignar roles por un nombre escrito en un formulario.
+## Despliegue y rutas
 
-Referencias: [Google OAuth](https://supabase.com/docs/guides/auth/social-sign-in/auth-google), [URLs de retorno](https://supabase.com/docs/guides/auth/redirect-urls) y [RLS](https://supabase.com/docs/guides/database/postgres/row-level-security).
+En Vercel se utiliza la carpeta raíz **`femcine`**, preset **Vue.js**, build **`npm run build`** y salida **`dist`**. Las dos variables públicas de Supabase se configuran en Vercel. [vercel.json](vercel.json) permite recargar las rutas de Vue Router directamente.
 
-## Modo local y caché
+Rutas principales: `/`, `/peliculas`, `/peliculas/:id`, `/peliculas/nueva`, `/peliculas/:id/editar`, `/comunidad`, `/perfil`, `/nosotras` y `/admin`. Las pantallas de gestión requieren una cuenta administradora.
 
-Sin variables de Supabase, la aplicación permite explorar una versión local. LocalStorage conserva datos del dispositivo y apoya la persistencia pedida por la consigna. Los datos públicos y las preferencias de cada cuenta deben permanecer separados; el modo local no otorga permisos administrativos en el servidor.
+## Comprobaciones realizadas
 
-Las tablas y servicios antiguos `user_movies` y `movie_requests`, si aparecen en una versión previa, no describen el modelo actual. No ejecutar instrucciones antiguas de importación de catálogos personales para configurar esta versión.
+- **29/29 pruebas automáticas** del proyecto y compilación de producción correctas.
+- **9/9 comprobaciones independientes** del frontend: aislamiento entre cuentas, respuestas tardías, guardado antes de navegar y sincronización del catálogo al restaurar Google.
+- Inicio con Google, creación del perfil y roles de las dos creadoras verificados en producción.
+- Alta, edición, recarga y eliminación de una película temporal; el catálogo quedó nuevamente con 16 películas.
+- Validaciones de obligatorios, longitudes, números y URL de póster comprobadas en pantalla.
+- Favoritos y calificaciones recuperados al recargar y reabrir una pestaña.
+- Una reseña y una publicación creadas desde una cuenta sin administración, conservadas y visibles después de aprobarse.
+- Vistas de móvil de 393 px, tablet de 768 px y escritorio revisadas.
 
-## GitHub y Vercel
+Para ejecutar las comprobaciones independientes desde la carpeta `femcine`:
 
-Publicar el código fuente sin `node_modules`, `dist`, contraseñas ni `.env.local`. En Vercel usar Vue CLI u Other, comando de build `npm run build` y carpeta de salida `dist`. Agregar las dos variables públicas de Supabase al entorno y desplegar de nuevo.
+```sh
+node --experimental-vm-modules verification/frontend-regressions.mjs .
+```
 
-`vercel.json` reescribe las rutas hacia `index.html`. Verificar una recarga directa de `/peliculas/x`, `/comunidad` y `/perfil` en la URL final. Después, actualizar las URLs autorizadas de Supabase y probar Google, CRUD y moderación desde producción.
+## Documentación complementaria
 
-La existencia de la configuración no demuestra que el repositorio o el despliegue estén publicados. Sus URLs y la conexión real se registran solo después de verificarlos.
+- [Estado de entrega](docs/ENTREGA.md).
+- [Guía de defensa oral](docs/DEFENSA.md).
+- [Guion de video](docs/GUION-VIDEO.md).
 
-## Entrega
-
-- `docs/ENTREGA.md`: comprobaciones y pendientes.
-- `docs/DEFENSA.md`: explicación de arquitectura y flujo de datos.
-- `docs/GUION-VIDEO.md`: demostración de aproximadamente ocho minutos.
-- `verification/`: pruebas independientes, cuando se incluyan en el paquete.
-
-Las capturas para el README y el video final deben mostrar esta versión real. No se incluyen imágenes simuladas ni se declara grabado un video que todavía no existe.
+El video final y el ZIP definitivo se preparan por separado; estas capturas no los sustituyen.

@@ -99,5 +99,30 @@ await check('alta espera confirmacion antes de navegar al detalle',async()=>{
   assert.equal(early,0,'navego antes de resolver addMovie');
   assert.equal(navigation.length,1); assert.equal(navigation[0].params.id,'new');
 });
+await check('restaurar sesion no descarta el catalogo publico actualizado',async()=>{
+  const remote=defer();
+  const m=await load('src/store/catalog.js',catalogMocks({publicMovies:()=>remote.promise,preferences:async()=>({x:{isFavorite:true,userRating:4}})}));
+  const loading=m.initCatalog();await m.setUserSession('A');
+  remote.resolve([{...movie},{id:'new',title:'Nueva'}]);await loading;
+  assert.equal(m.state.movies.some(x=>x.id==='new'),true,'la sesion descarto la pelicula nueva');
+  assert.equal(m.state.movies.find(x=>x.id==='x').isFavorite,true,'el catalogo borro las preferencias ya cargadas');
+  assert.equal(m.state.userId,'A');assert.equal(m.state.loading,false);
+});
+await check('salir durante la carga conserva la actualizacion publica sin datos privados',async()=>{
+  const remote=defer();
+  const m=await load('src/store/catalog.js',catalogMocks({publicMovies:()=>remote.promise}));
+  const loading=m.initCatalog('A');await m.setUserSession(null);
+  remote.resolve([{...movie},{id:'new',title:'Nueva'}]);await loading;
+  assert.equal(m.state.movies.some(x=>x.id==='new'),true,'salir descarto el catalogo publico');
+  assert.equal(m.state.movies.find(x=>x.id==='x').isFavorite,false);
+  assert.equal(m.state.userId,null);assert.equal(m.state.loading,false);
+});
+await check('fallo de catalogo tras restaurar sesion termina la carga y muestra error',async()=>{
+  const remote=defer();
+  const m=await load('src/store/catalog.js',catalogMocks({publicMovies:()=>remote.promise}));
+  const loading=m.initCatalog();await m.setUserSession('A');
+  remote.reject(new Error('network'));await loading;
+  assert.equal(typeof m.state.error,'string');assert.equal(m.state.loading,false);
+});
 console.log(JSON.stringify({passed,failed,scope:'codigo real con servicios de red simulados y respuestas diferidas'}));
 process.exitCode=failed?1:0;
