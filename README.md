@@ -1,68 +1,56 @@
 # FemCine
 
-Catálogo de películas y comunidad cinéfila con colecciones editoriales, reseñas, publicaciones y un oráculo interactivo en español.
+FemCine es nuestro proyecto para el parcial de **Práctica Profesionalizante Desarrollo Web y Mobile**. Elegimos hacer un catálogo de películas con una comunidad para compartir reseñas y recomendaciones.
 
-## Enlaces del proyecto
-
-| Recurso | Enlace |
-| --- | --- |
-| Aplicación publicada | [femcine.vercel.app](https://femcine.vercel.app/) |
-| Repositorio | [mora-larrigaudiere-c/WEB-ROMCOM](https://github.com/mora-larrigaudiere-c/WEB-ROMCOM) |
-| Código de la aplicación | [Carpeta de FemCine](femcine/) |
-| Supabase · Project URL | https://umlryyxwjswdcwykughr.supabase.co |
-
-La Project URL de Supabase es la dirección base de la API; no es una página de presentación. El catálogo, Google y la base de datos ya están conectados en la aplicación publicada.
+La idea es que se pueda buscar una película según la categoría, guardar favoritas y conversar sobre cine. Para el diseño usamos una estética en negro y fucsia, con referencias a las romcoms y a la cultura pop.
 
 ## Integrantes
 
-- **Mora Larrigaudiere Curutchet** — Diseñadora Multimedial.
-- **Oriana Fuentes Castro** — Diseñadora Multimedial. En la interfaz figura como Oriana Fuentes.
+- **Mora Larrigaudiere Curutchet**
+- **Oriana Fuentes Castro**
 
-Ambas comparten curaduría editorial, diseño visual, experiencia de usuario y desarrollo web. Las dos cuentas de las creadoras tienen el mismo rol de administración.
+**Carrera:** Tecnicatura Superior en Diseño Multimedial — ISEC.  
+**Docente:** Facundo Romero.
 
-## Funcionalidades implementadas
+Las dos participamos en la selección de películas, el diseño visual, la experiencia de usuario y el desarrollo de la página. En la web, Oriana aparece como Oriana Fuentes.
 
-- Catálogo público compartido con **16 películas**, buscador, filtros por categoría y ordenamiento por título o año.
-- Fichas con póster, sinopsis, dirección, duración y reseñas de la comunidad.
-- Inicio y cierre de sesión con **Google**, perfil y actividad de cada usuaria.
-- Favoritos y calificaciones personales, separados por cuenta.
-- Reseñas de películas y publicaciones propias en el **Club del Drama**.
-- Moderación: los aportes nuevos o editados quedan pendientes hasta que una administradora los aprueba.
-- Panel de creadoras para agregar, editar y eliminar películas y moderar aportes.
-- Formularios con `v-model`, validaciones personalizadas y mensajes de error visibles.
-- Oráculo con bola animada, sonido y respuestas en español obtenidas mediante **Fetch a YesNoOracle**.
-- Diseño para móvil, tablet y escritorio, navegación móvil, transiciones Vue y `transition-group`.
-- Formulario de suscripción de demostración: valida y registra el correo en LocalStorage; no realiza envíos de email.
+## Enlaces
 
-## Capturas de la aplicación publicada
+- [Página publicada en Vercel](https://femcine.vercel.app/)
+- [Repositorio de GitHub](https://github.com/mora-larrigaudiere-c/WEB-ROMCOM)
+- [Carpeta con el código de FemCine](femcine/)
+- **Project URL de Supabase:** https://umlryyxwjswdcwykughr.supabase.co
 
-Capturas reales tomadas el **11 de noviembre de 2026**. La sesión visible corresponde a una creadora; los controles administrativos se muestran según el rol.
+La URL de Supabase se usa para conectar la base de datos. Para ver y usar la página hay que entrar al enlace de Vercel.
 
-### Inicio · escritorio
+## ¿Qué se puede hacer?
 
-![Inicio de FemCine en escritorio](femcine/docs/capturas/inicio-escritorio.png)
+- Ver un catálogo de **16 películas** y entrar a la ficha de cada una.
+- Buscar por título, filtrar por categoría y ordenar por título o año.
+- Iniciar sesión con Google, editar el perfil, guardar favoritas y calificar películas.
+- Escribir reseñas y hacer publicaciones en el **Club del Drama**.
+- Consultar el oráculo, que muestra una respuesta en español con una bola animada y sonido.
+- Usar la página desde un celular, una tablet o una computadora.
 
-### Catálogo · escritorio
+También tenemos un **panel de creadoras**. Desde ahí podemos agregar, editar y eliminar películas, y aprobar o rechazar reseñas y publicaciones. Las dos integrantes tenemos los mismos permisos. Las usuarias que no son administradoras pueden enviar sus aportes, pero estos quedan en revisión antes de mostrarse en la comunidad.
 
-![Catálogo con 16 películas, filtros, ordenamiento y favoritos](femcine/docs/capturas/catalogo-escritorio.png)
+El formulario de novedades es una simulación: valida el correo y lo guarda en LocalStorage, pero no envía emails.
 
-### Club del Drama · escritorio
+## Tecnologías que usamos
 
-![Comunidad con la publicación aprobada Romcoms para una noche con amigas](femcine/docs/capturas/comunidad-escritorio.png)
+- **Vue 3 con Vue CLI** para armar la aplicación.
+- **Vue Router** para navegar entre las pantallas sin recargar toda la página.
+- **JavaScript y CSS** para las funciones y el diseño.
+- **LocalStorage** para guardar datos en el dispositivo.
+- **Supabase** para la base de datos y el inicio de sesión con Google.
+- **Fetch y la API de YesNoOracle** para obtener las respuestas del oráculo.
+- **Web Audio API** para el sonido del oráculo.
 
-### Inicio · móvil
+Para seguir la consigna usamos componentes reutilizables, `props` y `emits`, propiedades `computed`, los hooks `created()` y `mounted()`, formularios con `v-model`, una transición Vue y un `transition-group`.
 
-<img src="femcine/docs/capturas/inicio-movil.png" alt="Inicio de FemCine en un teléfono de 393 píxeles, con navegación inferior" width="320">
+## Cómo ejecutar el proyecto
 
-## Tecnologías
-
-**Vue 3 (Options API), Vue CLI 5, Vue Router 4, JavaScript, CSS, LocalStorage, Fetch, Supabase Auth/PostgreSQL y Web Audio API.**
-
-La aplicación incluye componentes reutilizables, comunicación mediante `props` y `emits`, propiedades `computed` y hooks `created()` y `mounted()`.
-
-## Instalación y ejecución local
-
-Requisitos: **Node.js 22 o superior**, npm y Git.
+Se necesita **Node.js 22 o superior**, npm y Git.
 
 ```sh
 git clone https://github.com/mora-larrigaudiere-c/WEB-ROMCOM.git
@@ -71,69 +59,57 @@ npm ci
 npm run dev
 ```
 
-Abrir http://localhost:3000/. Sin variables de Supabase se puede explorar el modo local; Google y la persistencia compartida requieren la configuración de la sección siguiente.
+Después, abrir **http://localhost:3000/** en el navegador.
 
-```sh
-npm test        # Pruebas automáticas del proyecto
-npm run build  # Compilación de producción en dist/
-```
-
-## Datos y permisos
-
-| Cuenta | Permisos |
-| --- | --- |
-| Visitante | Consultar catálogo, fichas y aportes aprobados; usar el oráculo. |
-| Usuaria con Google | Administrar su perfil, favoritos y calificaciones; enviar y editar sus propios aportes. |
-| Administradora | Gestionar el catálogo y aprobar o rechazar contenido comunitario. |
-
-Supabase utiliza las tablas `movies`, `profiles`, `admin_roles`, `movie_preferences`, `reviews` y `posts`. Las políticas **RLS** controlan los permisos en la base de datos. La API pública de perfiles no expone correos y cada usuaria accede a sus propias preferencias.
-
-**LocalStorage** conserva la caché pública y datos del dispositivo. **Supabase** mantiene el catálogo compartido, los perfiles, los aportes y las preferencias de las cuentas. Al restaurar la sesión de Google, la consulta pública del catálogo se completa sin descartar sus resultados.
-
-## Configuración de otro proyecto Supabase
-
-El proyecto publicado ya está configurado. Para conectar una copia a otro proyecto:
-
-1. Ejecutar [supabase/schema.sql](femcine/supabase/schema.sql) en el SQL Editor del nuevo proyecto. Crea las seis tablas, permisos, políticas y 16 películas iniciales. El seed puede repetirse sin reemplazar las ediciones existentes.
-2. Crear `femcine/.env.local` con los valores públicos de ese proyecto:
+Para usar Google y Supabase en una copia local, hay que crear un archivo `.env.local` dentro de la carpeta `femcine` con estos datos:
 
 ```dotenv
 VUE_APP_SUPABASE_URL=https://TU_PROYECTO.supabase.co
 VUE_APP_SUPABASE_ANON_KEY=TU_CLAVE_PUBLICABLE
 ```
 
-3. Habilitar Google en **Authentication → Sign In / Providers**. El Client ID y el Client Secret se guardan únicamente allí. Nunca incluir el secret de Google ni una clave `service_role` en el código o en variables `VUE_APP_*`.
-4. Registrar en Google el callback `https://TU_PROYECTO.supabase.co/auth/v1/callback`. Configurar en Supabase el Site URL de producción y las Redirect URLs de los entornos que se utilicen.
-5. Cada creadora inicia sesión una vez. Luego asignar su rol por el UUID real con [supabase/bootstrap_admin.sql](femcine/supabase/bootstrap_admin.sql).
-6. Reiniciar el servidor local o volver a compilar después de cambiar las variables.
+Sin esas variables, la aplicación permite explorar el modo local. En la página publicada, Google y la base de datos ya están conectados. El ID y el secret de Google se configuran en Supabase; el secret no va dentro del código.
 
-## Despliegue y rutas
-
-En Vercel se utiliza la carpeta raíz **`femcine`**, preset **Vue.js**, build **`npm run build`** y salida **`dist`**. Las dos variables públicas de Supabase se configuran en Vercel. [vercel.json](femcine/vercel.json) permite recargar las rutas de Vue Router directamente.
-
-Rutas principales: `/`, `/peliculas`, `/peliculas/:id`, `/peliculas/nueva`, `/peliculas/:id/editar`, `/comunidad`, `/perfil`, `/nosotras` y `/admin`. Las pantallas de gestión requieren una cuenta administradora.
-
-## Comprobaciones realizadas
-
-- **29/29 pruebas automáticas** del proyecto y compilación de producción correctas.
-- **9/9 comprobaciones independientes** del frontend: aislamiento entre cuentas, respuestas tardías, guardado antes de navegar y sincronización del catálogo al restaurar Google.
-- Inicio con Google, creación del perfil y roles de las dos creadoras verificados en producción.
-- Alta, edición, recarga y eliminación de una película temporal; el catálogo quedó nuevamente con 16 películas.
-- Validaciones de obligatorios, longitudes, números y URL de póster comprobadas en pantalla.
-- Favoritos y calificaciones recuperados al recargar y reabrir una pestaña.
-- Una reseña y una publicación creadas desde una cuenta sin administración, conservadas y visibles después de aprobarse.
-- Vistas de móvil de 393 px, tablet de 768 px y escritorio revisadas.
-
-Para ejecutar las comprobaciones independientes desde la carpeta `femcine`:
+También se pueden ejecutar estos comandos desde la carpeta `femcine`:
 
 ```sh
-node --experimental-vm-modules verification/frontend-regressions.mjs .
+npm test        # Ejecuta las pruebas del proyecto
+npm run build  # Genera la versión de producción en dist/
 ```
 
-## Documentación complementaria
+## Cómo organizamos los archivos
 
-- [Estado de entrega](femcine/docs/ENTREGA.md).
-- [Guía de defensa oral](femcine/docs/DEFENSA.md).
-- [Guion de video](femcine/docs/GUION-VIDEO.md).
+- `src/components`: partes que se reutilizan, como el navbar, las tarjetas, los formularios y el footer.
+- `src/views`: las pantallas de inicio, catálogo, detalle, alta/edición, comunidad, perfil, nosotras y administración.
+- `src/router`: las rutas de la página.
+- `src/services` y `src/store`: las funciones para trabajar con los datos y compartirlos entre las pantallas.
+- `src/assets`: imágenes y estilos.
+- `supabase`: el [SQL de las tablas y las películas iniciales](femcine/supabase/schema.sql).
 
-El video final y el ZIP definitivo se preparan por separado; estas capturas no los sustituyen.
+## Capturas de pantalla
+
+Estas capturas son de la página publicada, tomadas el **11 de noviembre de 2026**. En algunas se ve una cuenta de creadora, por eso aparecen las opciones de administración.
+
+### Inicio
+
+![Inicio de FemCine en computadora](femcine/docs/capturas/inicio-escritorio.png)
+
+### Catálogo de películas
+
+![Catálogo de FemCine con sus filtros y películas](femcine/docs/capturas/catalogo-escritorio.png)
+
+### Club del Drama
+
+![Publicación aprobada en la comunidad de FemCine](femcine/docs/capturas/comunidad-escritorio.png)
+
+### Versión para celular
+
+<img src="femcine/docs/capturas/inicio-movil.png" alt="Inicio de FemCine con la navegación para celular" width="320">
+
+## Pruebas que hicimos
+
+Probamos agregar una película, editar sus datos y eliminarla. También revisamos los mensajes que aparecen al dejar campos vacíos o escribir datos incorrectos. La película de prueba se eliminó y el catálogo quedó con las 16 películas originales.
+
+Comprobamos que los favoritos y las calificaciones se mantengan al recargar y al cerrar y volver a abrir una pestaña. Además, ingresamos con una cuenta sin permisos de administración, escribimos una reseña y una publicación, y verificamos que se vieran después de aprobarlas.
+
+Por último, revisamos la página en tamaños de celular, tablet y escritorio.
