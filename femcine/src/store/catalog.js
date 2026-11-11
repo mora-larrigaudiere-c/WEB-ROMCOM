@@ -31,6 +31,8 @@ export const state = reactive({
 
 // Epoch para descartar respuestas asíncronas tardías al cambiar o cerrar sesión
 let catalogEpoch = 0;
+// La consulta pública sigue siendo válida cuando cambia la sesión privada.
+let publicCatalogEpoch = 0;
 
 // Cola serial por película para evitar condiciones de carrera en upserts
 const preferenceQueues = new Map();
@@ -81,6 +83,7 @@ function saveGuestPreferences(prefs) {
 export async function initCatalog(userId = null) {
   catalogEpoch++;
   const epoch = catalogEpoch;
+  const publicEpoch = ++publicCatalogEpoch;
   state.userId = userId;
   state.loading = true;
 
@@ -111,13 +114,14 @@ export async function initCatalog(userId = null) {
   if (isSupabaseConfigured) {
     try {
       const remote = await fetchPublicMovies();
-      // Si la época sigue vigente, aplicar el catálogo remoto (incluso si viene [] vacío es válido)
-      if (epoch === catalogEpoch && Array.isArray(remote)) {
+      // Restaurar Google o cambiar de cuenta no debe descartar datos públicos.
+      if (publicEpoch === publicCatalogEpoch && Array.isArray(remote)) {
         state.movies = remote.map((m) => ({ ...m, isFavorite: false, userRating: 0 }));
+        applyPreferences();
         state.isCloud = true;
       }
     } catch (err) {
-      if (epoch === catalogEpoch) {
+      if (publicEpoch === publicCatalogEpoch) {
         state.error = 'No se pudo sincronizar el catálogo público desde el servidor. Mostrando versión en caché.';
       }
     }
@@ -141,8 +145,8 @@ export async function initCatalog(userId = null) {
       state.preferences = loadGuestPreferences();
       applyPreferences();
     }
-    state.loading = false;
   }
+  if (publicEpoch === publicCatalogEpoch) state.loading = false;
 }
 
 export async function setUserSession(userId) {
