@@ -12,7 +12,7 @@ La idea es que se pueda buscar una película según la categoría, guardar favor
 **Carrera:** Tecnicatura Superior en Diseño Multimedial — ISEC.  
 **Docente:** Facundo Romero.
 
-Las dos participamos en la selección de películas, el diseño visual, la experiencia de usuario y el desarrollo de la página. En la web, Oriana aparece como Oriana Fuentes.
+Las dos participamos en la selección de películas, el diseño visual, la experiencia de usuario y el desarrollo de la página.
 
 ## Enlaces
 
